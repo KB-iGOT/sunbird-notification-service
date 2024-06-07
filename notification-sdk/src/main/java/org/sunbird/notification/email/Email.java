@@ -30,7 +30,7 @@ public class Email {
   private String password;
   private String fromEmail;
   private static Email instance;
-  private String isTlsEnabled;
+  private String emailProtocol;
 
   private Email() {
     init();
@@ -80,6 +80,10 @@ public class Email {
       StringUtils.isNotBlank(config.getPort())
         ? config.getPort()
         : Util.readValue(Constants.EMAIL_SERVER_PORT);
+    this.emailProtocol = 
+      StringUtils.isNotBlank(config.getEmailProtocol())
+        ? config.getEmailProtocol()
+        : Util.readValue(Constants.EMAIL_SERVER_PROTOCOL);
     initProps();
   }
 
@@ -90,19 +94,22 @@ public class Email {
     userName = Util.readValue(Constants.EMAIL_SERVER_USERNAME);
     password = Util.readValue(Constants.EMAIL_SERVER_PASSWORD);
     fromEmail = Util.readValue(Constants.EMAIL_SERVER_FROM);
-    isTlsEnabled = Util.readValue(Constants.Is_TLS_Enable);
+    emailProtocol = Util.readValue(Constants.EMAIL_SERVER_PROTOCOL);
     if (StringUtils.isBlank(host)
       || StringUtils.isBlank(port)
       || StringUtils.isBlank(userName)
       || StringUtils.isBlank(password)
-      || StringUtils.isBlank(fromEmail)) {
+      || StringUtils.isBlank(fromEmail)
+      || StringUtils.isBlank(emailProtocol)) {
       logger.info(
         "Email setting value is not provided by Env variable=="
           + host
           + " "
           + port
           + " "
-          + fromEmail);
+          + fromEmail
+          + " "
+          + emailProtocol);
       response = false;
     } else {
       logger.info("All email properties are set correctly.");
@@ -135,10 +142,8 @@ public class Email {
      */
     props.put("mail.smtp.auth", "true");
     props.put("mail.smtp.port", port);
-    if ("true".equalsIgnoreCase(isTlsEnabled)) {
-      props.put("mail.smtp.starttls.enable", Constants.TRUE);
-      props.put("mail.smtp.ssl.protocols", Constants.TLS_VERSION_V1_2);
-    }
+    props.put("mail.smtp.starttls.enable", "true");
+    props.put("mail.smtp.ssl.protocols", emailProtocol);
   }
 
   /**

@@ -7,14 +7,16 @@ public class EmailConfig {
   private String password;
   private String host;
   private String port;
+  private String emailProtocol;
 
-  public EmailConfig(String fromEmail, String userName, String password, String host, String port) {
+  public EmailConfig(String fromEmail, String userName, String password, String host, String port, String emailProtocol) {
     super();
     this.fromEmail = fromEmail;
     this.userName = userName;
     this.password = password;
     this.host = host;
     this.port = port;
+    this.emailProtocol = emailProtocol;
   }
 
   public EmailConfig() {
@@ -59,5 +61,13 @@ public class EmailConfig {
 
   public void setPort(String port) {
     this.port = port;
+  }
+
+  public String getEmailProtocol() {
+    return emailProtocol;
+  }
+
+  public void setEmailProtocol(String emailProtocol) {
+    this.emailProtocol = emailProtocol;
   }
 }
