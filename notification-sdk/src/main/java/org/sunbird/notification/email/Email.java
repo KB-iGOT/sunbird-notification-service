@@ -251,7 +251,7 @@ public class Email {
   private void addRecipient(MimeMessage message, RecipientType type, List<String> recipient)
     throws AddressException, MessagingException {
     if (CollectionUtils.isEmpty(recipient)) {
-      logger.info("Recipient list is empty or null ");
+      logger.info("Recipient list is empty or null for type : " + type.toString());
       return;
     }
     for (String email : recipient) {
@@ -304,6 +304,7 @@ public class Email {
           List<String> emailList, String subject, String body, List<String> ccEmailList, List<String> bccList) {
     boolean response = true;
     Session session = getSession();
+    long startTime = System.currentTimeMillis();
     try {
       MimeMessage message = new MimeMessage(session);
       addRecipient(message, Message.RecipientType.TO, emailList);
@@ -315,6 +316,7 @@ public class Email {
       response = false;
       logger.error("Exception occured during email sending " + e.getMessage(), e);
     }
+    logger.info("Email Sent. Time taken (in ms): " + (System.currentTimeMillis() - startTime));
     return response;
   }
 
