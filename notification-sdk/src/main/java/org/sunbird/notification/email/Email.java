@@ -219,6 +219,7 @@ public class Email {
    */
   public boolean sendEmail(String fromEmail, String subject, String body, List<String> bccList) {
     boolean sentStatus = true;
+    long startTime = System.currentTimeMillis();
     try {
       Session session = getSession();
       MimeMessage message = new MimeMessage(session);
@@ -229,6 +230,7 @@ public class Email {
       sentStatus = false;
       logger.error("SendMail:sendMail: Exception occurred with message = " + e.getMessage(), e);
     }
+    logger.info("Email Sent. Time taken (in ms): " + (System.currentTimeMillis() - startTime));
     return sentStatus;
   }
 
