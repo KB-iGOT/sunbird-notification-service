@@ -158,8 +158,8 @@ public class Email {
    * @param body email body
    * @param subject Subject of email
    */
-  public boolean sendMail1(List<String> emailList, String subject, String body) {
-    return sendMail1(emailList, subject, body, null);
+  public boolean sendMail_old(List<String> emailList, String subject, String body) {
+    return sendMail_old(emailList, subject, body, null);
   }
 
   /**
@@ -171,7 +171,7 @@ public class Email {
    * @param ccEmailList List of Cc emails
    * @return boolean
    */
-  public boolean sendMail1(
+  public boolean sendMail_old(
     List<String> emailList, String subject, String body, List<String> ccEmailList) {
     long startTime = System.currentTimeMillis();
     boolean response = true;
@@ -181,7 +181,7 @@ public class Email {
       addRecipient(message, Message.RecipientType.TO, emailList);
       addRecipient(message, Message.RecipientType.CC, ccEmailList);
       setMessageAttribute(message, fromEmail, subject, body);
-      response = sendEmail1(session, message);
+      response = sendEmail_old(session, message);
     } catch (Exception e) {
       response = false;
       logger.error("Exception occured during email sending " + e, e);
@@ -207,7 +207,7 @@ public class Email {
       message.setSubject(subject);
       Multipart multipart = createMultipartData(emailBody, filePath);
       setMessageAttribute(message, fromEmail, subject, multipart);
-      sendEmail1(session, message);
+      sendEmail_old(session, message);
     } catch (Exception e) {
       logger.error("Exception occured during email sending " + e, e);
     }
@@ -222,7 +222,7 @@ public class Email {
    * @param bccList recipient bcc list
    * @return boolean
    */
-  public boolean sendEmail1(String fromEmail, String subject, String body, List<String> bccList) {
+  public boolean sendEmail_old(String fromEmail, String subject, String body, List<String> bccList) {
     boolean sentStatus = true;
     long startTime = System.currentTimeMillis();
     try {
@@ -230,7 +230,7 @@ public class Email {
       MimeMessage message = new MimeMessage(session);
       addRecipient(message, Message.RecipientType.BCC, bccList);
       setMessageAttribute(message, fromEmail, subject, body);
-      sentStatus = sendEmail1(session, message);
+      sentStatus = sendEmail_old(session, message);
     } catch (Exception e) {
       sentStatus = false;
       logger.error("SendMail:sendMail: Exception occurred with message = " + e.getMessage(), e);
@@ -280,7 +280,7 @@ public class Email {
     message.setContent(multipart, "text/html; charset=utf-8");
   }
 
-  private boolean sendEmail1(Session session, MimeMessage message) {
+  private boolean sendEmail_old(Session session, MimeMessage message) {
     Transport transport = null;
     boolean response = true;
     try {
