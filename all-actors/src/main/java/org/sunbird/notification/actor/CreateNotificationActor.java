@@ -11,12 +11,12 @@ import org.sunbird.common.exception.BaseException;
 import org.sunbird.common.message.IResponseMessage;
 import org.sunbird.common.message.ResponseCode;
 import org.sunbird.common.request.Request;
+import org.sunbird.common.response.Response;
 import org.sunbird.notification.handler.FeedNotificationHandler;
 import org.sunbird.notification.handler.INotificationHandler;
 import org.sunbird.notification.handler.NotificationHandlerFactory;
 import org.sunbird.pojo.NotificationV2Request;
 import org.sunbird.request.LoggerUtil;
-import org.sunbird.common.response.Response;
 import org.sunbird.telemetry.TelemetryEnvKey;
 import org.sunbird.telemetry.util.TelemetryUtil;
 
@@ -37,7 +37,7 @@ public class CreateNotificationActor extends BaseActor {
 
     @Override
     public void onReceive(Request request) throws Throwable {
-        logger.info(request.getRequest(),"Call started for onReceive method");
+        logger.info(request.getContext(),"Call started for onReceive method");
         boolean isSync = false;
         String version = (String) request.getRequest().get(JsonKey.VERSION);
         try {

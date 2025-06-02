@@ -2,20 +2,17 @@ package org.sunbird.notification.handler;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.firebase.internal.NonNull;
 import org.apache.commons.collections.CollectionUtils;
-
 import org.apache.commons.collections.MapUtils;
-import org.mockito.internal.matchers.Not;
 import org.sunbird.JsonKey;
 import org.sunbird.common.exception.BaseException;
 import org.sunbird.common.message.IResponseMessage;
 import org.sunbird.common.message.ResponseCode;
+import org.sunbird.common.response.Response;
 import org.sunbird.pojo.NotificationFeed;
 import org.sunbird.pojo.NotificationType;
 import org.sunbird.pojo.NotificationV2Request;
 import org.sunbird.request.LoggerUtil;
-import org.sunbird.common.response.Response;
 import org.sunbird.service.NotificationService;
 import org.sunbird.service.NotificationServiceImpl;
 import org.sunbird.util.Util;
@@ -25,7 +22,6 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 
 public class FeedNotificationHandler implements INotificationHandler{
@@ -95,15 +91,15 @@ public class FeedNotificationHandler implements INotificationHandler{
     private void deleteUserFeed(Map<String,List<String>> feedListMap, boolean isSupportEnabled, Map<String,Object> reqContext) throws IOException {
          if(MapUtils.isNotEmpty(feedListMap)){
              List<String> feedList = new ArrayList<>();
-             for (List<String> feed: feedListMap.values()) {
-                 feedList.addAll(feed);
+             for (Map.Entry<String,List<String>> entry: feedListMap.entrySet()) {
+                 feedList = entry.getValue();
+                 if (isSupportEnabled) {
+                     List<Map<String, Object>> mappedFeedIdLists = notificationService.getFeedMap(feedList, reqContext);
+                     List<String> feedIds = mappedFeedIdLists.stream().map(x -> x.get(JsonKey.FEED_ID)).filter(Objects::nonNull).map(Object::toString)
+                             .collect(Collectors.toList());
+                     feedList.addAll(feedIds);
+                 }
              }
-             if (isSupportEnabled) {
-                List<Map<String, Object>> mappedFeedIdLists = notificationService.getFeedMap(feedList, reqContext);
-                List<String> feedIds = mappedFeedIdLists.stream().map(x -> x.get(JsonKey.FEED_ID)).filter(Objects::nonNull).map(Object::toString)
-                        .collect(Collectors.toList());
-                 feedList.addAll(feedIds);
-            }
             notificationService.deleteNotificationFeed(feedListMap, reqContext);
             if(isSupportEnabled) {
                  notificationService.deleteNotificationFeedMap(feedList, reqContext);
@@ -187,11 +183,13 @@ public class FeedNotificationHandler implements INotificationHandler{
         Map<String,Object> templateData = new HashMap<>();
         for (Map.Entry<String,Object> itr: dataMap.entrySet()) {
             if(JsonKey.ACTION_DATA.equals(itr.getKey())) {
-                for (Map.Entry<String,Object> itrKey: actionDataMap.entrySet()) {
-                    if (JsonKey.TITLE.equals(itrKey.getKey()) || JsonKey.DESCRIPTION.equals(itrKey.getKey())) {
-                        templateData.put(itrKey.getKey(), itrKey.getValue());
-                    } else {
-                        additionalInfo.put(itrKey.getKey(), itrKey.getValue());
+                if(MapUtils.isNotEmpty(actionDataMap)) {
+                    for (Map.Entry<String, Object> itrKey : actionDataMap.entrySet()) {
+                        if (JsonKey.TITLE.equals(itrKey.getKey()) || JsonKey.DESCRIPTION.equals(itrKey.getKey())) {
+                            templateData.put(itrKey.getKey(), itrKey.getValue());
+                        } else {
+                            additionalInfo.put(itrKey.getKey(), itrKey.getValue());
+                        }
                     }
                 }
             }else{
@@ -208,7 +206,9 @@ public class FeedNotificationHandler implements INotificationHandler{
         actionMap.put(JsonKey.CREATED_BY,createdBy);
         actionMap.put(JsonKey.TEMPLATE,template);
         actionMap.put(JsonKey.ADDITIONAL_INFO,additionalInfo);
-        actionMap.put(JsonKey.TYPE,actionDataMap.get(JsonKey.ACTION_TYPE));
+        if(MapUtils.isNotEmpty(actionDataMap)){
+            actionMap.put(JsonKey.TYPE,actionDataMap.get(JsonKey.ACTION_TYPE));
+        }
         actionMap.put(JsonKey.CATEGORY,notification.get(JsonKey.CATEGORY));
         notificationV2Request.setAction(actionMap);
         return notificationV2Request;

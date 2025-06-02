@@ -55,6 +55,7 @@ public class DeleteNotificationActorTest extends BaseActorTest{
         propertiesCache = Mockito.mock(PropertiesCache.class);
         Mockito.when(PropertiesCache.getInstance()).thenReturn(propertiesCache);
         when(propertiesCache.getProperty(org.sunbird.JsonKey.VERSION_SUPPORT_CONFIG_ENABLE)).thenReturn("true");
+        when(propertiesCache.getProperty(org.sunbird.JsonKey.SUNBIRD_NOTIFICATION_KEYSPACE)).thenReturn("sunbird_notifications");
 
     }
 
@@ -76,7 +77,13 @@ public class DeleteNotificationActorTest extends BaseActorTest{
         PowerMockito.mockStatic(ServiceFactory.class);
         cassandraOperation = mock(CassandraOperationImpl.class);
         when(ServiceFactory.getInstance()).thenReturn(cassandraOperation);
-        when(cassandraOperation.batchDelete(
+        when(cassandraOperation.batchUpdate(
+                Mockito.anyString(),
+                Mockito.anyString(),
+                Mockito.anyList(),
+                Mockito.anyMap()))
+                .thenReturn(getCassandraResponse());
+        when(cassandraOperation.batchUpdateById(
                 Mockito.anyString(),
                 Mockito.anyString(),
                 Mockito.anyList(),
@@ -113,7 +120,13 @@ public class DeleteNotificationActorTest extends BaseActorTest{
         PowerMockito.mockStatic(ServiceFactory.class);
         cassandraOperation = mock(CassandraOperationImpl.class);
         when(ServiceFactory.getInstance()).thenReturn(cassandraOperation);
-        when(cassandraOperation.batchDelete(
+        when(cassandraOperation.batchUpdate(
+                Mockito.anyString(),
+                Mockito.anyString(),
+                Mockito.anyList(),
+                Mockito.anyMap()))
+                .thenReturn(getCassandraResponse());
+        when(cassandraOperation.batchUpdateById(
                 Mockito.anyString(),
                 Mockito.anyString(),
                 Mockito.anyList(),
@@ -144,7 +157,13 @@ public class DeleteNotificationActorTest extends BaseActorTest{
         PowerMockito.mockStatic(ServiceFactory.class);
         cassandraOperation = mock(CassandraOperationImpl.class);
         when(ServiceFactory.getInstance()).thenReturn(cassandraOperation);
-        when(cassandraOperation.batchDelete(
+        when(cassandraOperation.batchUpdate(
+                Mockito.anyString(),
+                Mockito.anyString(),
+                Mockito.anyList(),
+                Mockito.anyMap()))
+                .thenReturn(getCassandraResponse());
+        when(cassandraOperation.batchUpdateById(
                 Mockito.anyString(),
                 Mockito.anyString(),
                 Mockito.anyList(),

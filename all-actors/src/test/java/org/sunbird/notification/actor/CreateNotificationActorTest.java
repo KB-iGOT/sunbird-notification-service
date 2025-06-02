@@ -3,8 +3,6 @@ package org.sunbird.notification.actor;
 import akka.actor.ActorRef;
 import akka.actor.Props;
 import akka.testkit.javadsl.TestKit;
-
-import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.junit.Assert;
 import org.junit.Before;
@@ -23,7 +21,6 @@ import org.sunbird.common.request.Request;
 import org.sunbird.common.response.Response;
 import org.sunbird.common.util.JsonKey;
 import org.sunbird.notification.email.Email;
-
 import org.sunbird.util.SystemConfigUtil;
 import org.sunbird.utils.PropertiesCache;
 import org.sunbird.utils.ServiceFactory;
@@ -31,7 +28,8 @@ import org.sunbird.utils.ServiceFactory;
 import java.time.Duration;
 import java.util.*;
 
-import static org.powermock.api.mockito.PowerMockito.*;
+import static org.powermock.api.mockito.PowerMockito.mock;
+import static org.powermock.api.mockito.PowerMockito.when;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({
@@ -63,6 +61,7 @@ public class CreateNotificationActorTest extends BaseActorTest{
         when(propertiesCache.getProperty(org.sunbird.JsonKey.NOTIFICATION_CATEGORY_TYPE_CONFIG)).thenReturn("certificateUpload,add-member");
         when(propertiesCache.getProperty(org.sunbird.JsonKey.VERSION_SUPPORT_CONFIG_ENABLE)).thenReturn("true");
         when(propertiesCache.getProperty(org.sunbird.JsonKey.FEED_LIMIT)).thenReturn("1");
+        when(propertiesCache.getProperty(org.sunbird.JsonKey.SUNBIRD_NOTIFICATION_KEYSPACE)).thenReturn("sunbird_notifications");
 
     }
 

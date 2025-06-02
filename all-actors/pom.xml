@@ -12,8 +12,19 @@
     <dependency>
         <groupId>org.apache.kafka</groupId>
         <artifactId>kafka-clients</artifactId>
-        <version>0.10.0.1</version>
+        <version>3.4.0</version>
+        <exclusions>
+            <exclusion>
+                <groupId>org.xerial.snappy</groupId>
+                <artifactId>snappy-java</artifactId>
+            </exclusion>
+        </exclusions>
     </dependency>
+        <dependency>
+            <groupId>org.xerial.snappy</groupId>
+            <artifactId>snappy-java</artifactId>
+            <version>1.1.10.4</version>
+        </dependency>
     <dependency>
         <groupId>org.sunbird</groupId>
         <artifactId>sb-telemetry-utils</artifactId>
@@ -44,37 +55,44 @@
         <groupId>org.everit.json</groupId>
         <artifactId>org.everit.json.schema</artifactId>
         <version>1.5.1</version>
+        <exclusions>
+            <exclusion>
+                <groupId>org.json</groupId>
+                <artifactId>json</artifactId>
+            </exclusion>
+        </exclusions>
     </dependency>
     <dependency>
-        <groupId>commons-collections</groupId>
-        <artifactId>commons-collections</artifactId>
-        <version>3.2</version>
+        <groupId>org.json</groupId>
+        <artifactId>json</artifactId>
+        <version>20231013</version>
+        <scope>compile</scope>
     </dependency>
     <dependency>
         <groupId>org.powermock</groupId>
         <artifactId>powermock-core</artifactId>
-        <version>2.0.2</version>
+        <version>${powermock.version}</version>
     </dependency>
     <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
-        <version>4.12</version>
+        <version>${junit.version}</version>
     </dependency>
     <dependency>
         <groupId>com.typesafe.akka</groupId>
         <artifactId>akka-testkit_${scala.major.version}</artifactId>
-        <version>2.5.22</version>
+        <version>${typesafe.akka.version}</version>
         <scope>test</scope>
     </dependency>
     <dependency>
         <groupId>org.powermock</groupId>
         <artifactId>powermock-module-junit4</artifactId>
-        <version>2.0.2</version>
+        <version>${powermock.version}</version>
     </dependency>
     <dependency>
         <groupId>org.powermock</groupId>
         <artifactId>powermock-api-mockito2</artifactId>
-        <version>2.0.2</version>
+        <version>${powermock.version}</version>
     </dependency>
     </dependencies>
     <build>
@@ -99,6 +117,18 @@
                                     <exclude>org.apache.maven:lib:tests</exclude>
                                 </excludes>
                             </artifactSet>
+                            <filters>
+                                <filter>
+                                    <!-- Do not copy the signatures in the META-INF folder.
+                                    Otherwise, this might cause SecurityExceptions when using the JAR. -->
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
                         </configuration>
                     </execution>
                 </executions>
@@ -106,7 +136,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.5</version>
+                <version>${jacoco-maven-plugin.version}</version>
                 <configuration>
                     <destFile>${basedir}/target/coverage-reports/jacoco-unit.exec</destFile>
                     <dataFile>${basedir}/target/coverage-reports/jacoco-unit.exec</dataFile>

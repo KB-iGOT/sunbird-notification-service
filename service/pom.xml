@@ -75,7 +75,7 @@
         <dependency>
             <groupId>com.typesafe.akka</groupId>
             <artifactId>akka-remote_${scala.major.version}</artifactId>
-            <version>${akka.x.version}</version>
+            <version>${typesafe.akka.version}</version>
         </dependency>
         <dependency>
             <groupId>com.typesafe.play</groupId>
@@ -107,9 +107,14 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <artifactId>netty-common</artifactId>
+            <groupId>io.netty</groupId>
+            <version>4.1.77.Final</version>
+        </dependency>
+        <dependency>
             <groupId>com.typesafe.play</groupId>
             <artifactId>play-netty-server_${scala.major.version}</artifactId>
-            <version>2.7.2</version>
+            <version>${play2.version}</version>
             <scope>runtime</scope>
             <exclusions>
                 <exclusion>
@@ -142,13 +147,23 @@
             <groupId>com.github.danielwegener</groupId>
             <artifactId>logback-kafka-appender</artifactId>
             <version>0.2.0-RC2</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.xerial.snappy</groupId>
+                    <artifactId>snappy-java</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>net.logstash.logback</groupId>
             <artifactId>logstash-logback-encoder</artifactId>
             <version>6.6</version>
         </dependency>
-
+        <dependency>
+            <groupId>org.xerial.snappy</groupId>
+            <artifactId>snappy-java</artifactId>
+            <version>1.1.10.4</version>
+        </dependency>
         <dependency>
             <groupId>ch.qos.logback.contrib</groupId>
             <artifactId>logback-jackson</artifactId>
@@ -161,13 +176,11 @@
             <artifactId>logback-json-classic</artifactId>
             <version>0.1.5</version>
         </dependency>
-
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <version>1.2.3</version>
         </dependency>
-
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-core</artifactId>
@@ -194,11 +207,6 @@
                 <extensions>true</extensions>
             </plugin>
             <plugin>
-                <groupId>com.google.code.sbt-compiler-maven-plugin</groupId>
-                <artifactId>sbt-compiler-maven-plugin</artifactId>
-                <version>1.0.0</version>
-            </plugin>
-            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.0</version>
@@ -209,7 +217,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M4</version>
+                <version>${surefire.plugin.version}</version>
                 <configuration>
                     <includes>
                         <include>**/*Spec.java</include>
@@ -220,7 +228,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.5</version>
+                <version>${jacoco-maven-plugin.version}</version>
                 <configuration>
                     <destFile>${basedir}/target/coverage-reports/jacoco-unit.exec</destFile>
                     <dataFile>${basedir}/target/coverage-reports/jacoco-unit.exec</dataFile>

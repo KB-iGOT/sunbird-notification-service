@@ -6,9 +6,10 @@ import org.sunbird.JsonKey;
 import org.sunbird.cassandra.CassandraOperation;
 import org.sunbird.common.Constants;
 import org.sunbird.common.exception.BaseException;
-import org.sunbird.utils.ServiceFactory;
-import org.sunbird.pojo.NotificationFeed;
 import org.sunbird.common.response.Response;
+import org.sunbird.notification.utils.Util;
+import org.sunbird.pojo.NotificationFeed;
+import org.sunbird.utils.ServiceFactory;
 
 import java.util.*;
 
@@ -16,7 +17,7 @@ public class NotificationDaoImpl implements NotificationDao{
     private static final String NOTIFICATION_FEED = "notification_feed";
     private static final String NOTIFICATION_ACTION_TEMPLATE = "action_template";
     private static final String NOTIFICATION_TEMPLATE = "notification_template";
-    private static final String KEY_SPACE_NAME = "sunbird_notifications";
+    private static final String KEY_SPACE_NAME = Util.readValue(JsonKey.SUNBIRD_NOTIFICATION_KEYSPACE);
     private static final String FEED_VERSION_MAP = "feed_version_map";
 
     private CassandraOperation cassandraOperation = ServiceFactory.getInstance();
@@ -31,19 +32,6 @@ public class NotificationDaoImpl implements NotificationDao{
         return notificationDao;
     }
 
-    @Override
-    public Response getTemplate(String templateId, Map<String,Object> reqContext) throws BaseException {
-
-
-        return cassandraOperation.getRecordsByProperty(KEY_SPACE_NAME,NOTIFICATION_TEMPLATE,JsonKey.TEMPLATE_ID,templateId,reqContext);
-
-    }
-
-    @Override
-    public Response getTemplateId(String actionType, Map<String,Object> reqContext) throws BaseException {
-
-        return cassandraOperation.getRecordsByProperty(KEY_SPACE_NAME,NOTIFICATION_ACTION_TEMPLATE,JsonKey.ACTION,actionType,reqContext);
-    }
 
     @Override
     public Response createNotificationFeed(List<NotificationFeed> feeds, Map<String,Object> reqContext) throws BaseException {
@@ -86,14 +74,19 @@ public class NotificationDaoImpl implements NotificationDao{
 
     @Override
     public Response deleteUserFeed(List<NotificationFeed> feeds, Map<String,Object> context) throws BaseException {
-        List<Map<String,Object>> properties = new ArrayList<>();
+        List<Map<String, Map<String, Object>>> properties = new ArrayList<>();
         for (NotificationFeed feed : feeds) {
-            Map<String,Object> map = new HashMap<>();
-            map.put(JsonKey.ID,feed.getId());
-            map.put(JsonKey.USER_ID,feed.getUserId());
-            properties.add(map);
+            Map<String,Map<String,Object>> keysMap = new HashMap<>();
+            Map<String, Object> primaryKeyMap = new HashMap<>();
+            Map<String, Object> nonPrimaryKeyMap = new HashMap<>();
+            primaryKeyMap.put(JsonKey.ID,feed.getId());
+            primaryKeyMap.put(JsonKey.USER_ID,feed.getUserId());
+            nonPrimaryKeyMap.put(JsonKey.STATUS,"deleted");
+            keysMap.put(Constants.PRIMARY_KEY,primaryKeyMap);
+            keysMap.put(Constants.NON_PRIMARY_KEY,nonPrimaryKeyMap);
+            properties.add(keysMap);
         }
-       return cassandraOperation.batchDelete(KEY_SPACE_NAME,NOTIFICATION_FEED, properties, context);
+       return cassandraOperation.batchUpdate(KEY_SPACE_NAME,NOTIFICATION_FEED, properties, context);
     }
 
     @Override
@@ -113,8 +106,9 @@ public class NotificationDaoImpl implements NotificationDao{
         for (String feedId : feedIds) {
             Map<String,Object> map = new HashMap<>();
             map.put(JsonKey.ID,feedId);
+            map.put(JsonKey.STATUS,"deleted");
             properties.add(map);
         }
-        return cassandraOperation.batchDelete(KEY_SPACE_NAME,FEED_VERSION_MAP, properties, context);
+        return cassandraOperation.batchUpdateById(KEY_SPACE_NAME,FEED_VERSION_MAP,properties,context);
     }
 }
