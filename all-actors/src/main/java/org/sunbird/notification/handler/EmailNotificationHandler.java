@@ -56,6 +56,7 @@ public class EmailNotificationHandler implements INotificationHandler{
     private NotificationRequest createNotificationObj(NotificationV2Request notificationRequest, Map<String,Object> templateConfig) {
         NotificationRequest notification = new NotificationRequest();
         notification.setIds(notificationRequest.getIds());
+        notification.setBccIds(notificationRequest.getBccIds());
         notification.setMode(DeliveryMode.email.name());
         notification.setCopyEmail(notificationRequest.getCopyEmail());
         Config config = new Config();

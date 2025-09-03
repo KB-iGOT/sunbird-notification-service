@@ -17,6 +17,8 @@ public class NotificationRequest {
   /** required */
   private List<String> ids;
 
+    private List<String> bccIds;
+
   private Template template;
 
   private JsonNode rawData;
@@ -82,6 +84,10 @@ public class NotificationRequest {
   public void setCopyEmail(List<String> copyEmail) {
     this.copyEmail = copyEmail;
   }
+
+  public List<String> getBccIds() { return bccIds; }
+
+  public void setBccIds(List<String> bccIds) { this.bccIds = bccIds; }
 
   @Override
   public String toString() {

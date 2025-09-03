@@ -37,7 +37,7 @@ public class SyncMessageDispatcher {
             notificationRequest.getConfig().getSubject(),
             notificationRequest.getIds(),
             notificationRequest.getCopyEmail(),
-            null,
+            notificationRequest.getBccIds(),
             null,
             notificationRequest.getTemplate().getData(),
             null);

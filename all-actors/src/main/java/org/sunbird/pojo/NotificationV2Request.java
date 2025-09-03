@@ -11,6 +11,8 @@ public class NotificationV2Request {
     private Map<String,Object> action;
     private List<String> copyEmail;
 
+    private List<String> bccIds;
+
     public List<String> getIds() {
         return ids;
     }
@@ -50,4 +52,8 @@ public class NotificationV2Request {
     public void setCopyEmail(List<String> copyEmail) {
         this.copyEmail = copyEmail;
     }
+
+    public List<String> getBccIds() { return bccIds; }
+
+    public void setBccIds(List<String> bccIds) { this.bccIds = bccIds; }
 }
