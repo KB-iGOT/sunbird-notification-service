@@ -323,6 +323,7 @@ public class CreateNotificationActorTest extends BaseActorTest{
         action.put(JsonKey.CATEGORY,"certificates");
         notification.put(JsonKey.ACTION,action);
         notification.put(JsonKey.IDS, Arrays.asList("1234"));
+        notification.put(JsonKey.BCC_IDS, Arrays.asList("1234"));
         notification.put(JsonKey.TYPE,"feed");
         notification.put("priority",1);
         reqMap.put(JsonKey.NOTIFICATIONS,Arrays.asList(notification));
@@ -413,6 +414,7 @@ public class CreateNotificationActorTest extends BaseActorTest{
         action.put(JsonKey.CATEGORY,"certificates");
         notification.put(JsonKey.ACTION,action);
         notification.put(JsonKey.IDS, Arrays.asList("1234"));
+        notification.put(JsonKey.BCC_IDS, Arrays.asList("1234"));
         notification.put(JsonKey.TYPE,"feed");
         notification.put("priority",1);
         reqMap.put(JsonKey.NOTIFICATIONS,Arrays.asList(notification));
@@ -444,6 +446,7 @@ public class CreateNotificationActorTest extends BaseActorTest{
         action.put(JsonKey.CATEGORY,"certificates");
         notification.put(JsonKey.ACTION,action);
         notification.put(JsonKey.IDS, Arrays.asList("1234"));
+        notification.put(JsonKey.BCC_IDS, Arrays.asList("1234"));
         notification.put(JsonKey.TYPE,"feed");
         notification.put("priority",1);
         reqMap.put(JsonKey.NOTIFICATIONS,Arrays.asList(notification));
