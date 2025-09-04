@@ -33,6 +33,14 @@
             }
           ]
         },
+        "bccIds": {
+          "type": ["array", "null"],
+          "items": [
+            {
+              "type": "string"
+            }
+          ]
+        },
         "priority": {
           "type": "integer"
         },
