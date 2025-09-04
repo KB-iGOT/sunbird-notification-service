@@ -57,7 +57,6 @@ public class CreateNotificationActor extends BaseActor {
                         .collect(Collectors.toList());
                 for (NotificationV2Request notificationV2Request : notificationRequestList) {
                     NotificationValidator.validateMaxSupportedIds(notificationV2Request.getIds());
-                    NotificationValidator.validateMaxSupportedIds(notificationV2Request.getBccIds());
                     INotificationHandler handler = NotificationHandlerFactory.getNotificationHandler(notificationV2Request.getType());
                     response = handler.sendNotification(notificationV2Request, false, isSync, request.getContext());
                 }
