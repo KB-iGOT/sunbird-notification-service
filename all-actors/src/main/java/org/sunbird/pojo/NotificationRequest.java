@@ -17,7 +17,7 @@ public class NotificationRequest {
   /** required */
   private List<String> ids;
 
-    private List<String> bccIds;
+  private List<String> bccIds;
 
   private Template template;
 

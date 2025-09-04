@@ -33,7 +33,8 @@ public class EmailNotificationHandler implements INotificationHandler{
     public Response sendNotification(NotificationV2Request notificationRequest, boolean isDryRun, boolean isSync, Map<String,Object> reqContext) throws BaseException {
         logger.info("EmailNotificationHandler: making call to sendNotifications method");
         Response response = new Response();
-        if(null != notificationRequest && CollectionUtils.isNotEmpty(notificationRequest.getIds())){
+        if (null != notificationRequest && (CollectionUtils.isNotEmpty(notificationRequest.getIds()) ||
+                CollectionUtils.isNotEmpty(notificationRequest.getBccIds()))) {
             Map<String, Object> responseMap = new HashMap<String, Object>();
             Map<String,Object> template = Util.getTemplate(notificationRequest, notificationService, reqContext);
             Map<String,Object> dataTemplate =new HashMap<>();
