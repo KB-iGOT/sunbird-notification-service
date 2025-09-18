@@ -150,4 +150,5 @@ public interface JsonKey {
   String CREATE_NOTIFICATION = "create";
   String DATA = "data";
   String ACTION_DATA = "actionData";
+  String BCC_IDS = "bccIds";
 }
