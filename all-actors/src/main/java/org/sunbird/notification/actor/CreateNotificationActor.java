@@ -2,7 +2,9 @@ package org.sunbird.notification.actor;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.mockito.CheckReturnValue;
 import org.sunbird.BaseActor;
 import org.sunbird.JsonKey;
 import org.sunbird.NotificationValidator;
@@ -57,6 +59,9 @@ public class CreateNotificationActor extends BaseActor {
                         .collect(Collectors.toList());
                 for (NotificationV2Request notificationV2Request : notificationRequestList) {
                     NotificationValidator.validateMaxSupportedIds(notificationV2Request.getIds());
+                    if (CollectionUtils.isEmpty(notificationV2Request.getBccIds())) {
+                        notificationV2Request.setBccIds(new ArrayList<>());
+                    }
                     NotificationValidator.validateMaxSupportedIds(notificationV2Request.getBccIds());
                     INotificationHandler handler = NotificationHandlerFactory.getNotificationHandler(notificationV2Request.getType());
                     response = handler.sendNotification(notificationV2Request, false, isSync, request.getContext());
