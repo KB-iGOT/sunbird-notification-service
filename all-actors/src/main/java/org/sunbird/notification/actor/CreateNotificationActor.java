@@ -4,7 +4,6 @@ package org.sunbird.notification.actor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.mockito.CheckReturnValue;
 import org.sunbird.BaseActor;
 import org.sunbird.JsonKey;
 import org.sunbird.NotificationValidator;
